@@ -1,48 +1,43 @@
 name: Verify Human Identity
 
-# -------------------------------------------------
-# 1️⃣  PEMICU (event trigger)
-# -------------------------------------------------
 on:
-  workflow_dispatch:          # <-- ini memberi tombol “Run workflow” di UI GitHub
+  workflow_dispatch:
     inputs:
       agent_name:
         description: 'agus_ojisan'
         required: true
         default: 'agus_ojisan'
       agent_description:
-        description: 'agus_ojisan AI Agent'
+        description: 'agus_ojisan agen'
         required: true
         default: 'agus_ojisan AI Agent'
 
-# -------------------------------------------------
-# 2️⃣  JOB yang akan dijalankan
-# -------------------------------------------------
 jobs:
   verify:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repo (your fork)
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout verified‑agent‑identity skill
+        uses: actions/checkout@v3
         with:
-          node-version: '20'
+          repository: BillionsNetwork/verified-agent-identity
+          path: verified-agent-identity
 
-      - name: Step 1 - Install ClawHub skill
-        run: npx clawhub@latest install verified-agent-identity
-
-      - name: Install script dependencies
+      - name: Install skill dependencies
         run: |
-          cd scripts
-          npm install
+          cd verified-agent-identity
+          npm ci
 
-      - name: Step 2 - Create new Ethereum Identity
-        run: node scripts/createNewEthereumIdentity.js
-
-      - name: Step 3 - Link Human to Agent
+      - name: Create new Ethereum Identity
         run: |
-          node scripts/manualLinkHumanToAgent.js \
+          cd verified-agent-identity/scripts
+          node createNewEthereumIdentity.js
+
+      - name: Link Human to Agent
+        run: |
+          cd verified-agent-identity/scripts
+          node manualLinkHumanToAgent.js \
             --challenge '{"name": "${{ github.event.inputs.agent_name }}", "description": "${{ github.event.inputs.agent_description }}"}'
