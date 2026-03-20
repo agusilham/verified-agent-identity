@@ -29,7 +29,7 @@ jobs:
       - name: Install skill dependencies
         run: |
           cd verified-agent-identity
-          npm ci
+          npm install shell-quote @iden3/js-iden3-auth @0xpolygonid/js-sdk ethers uuid cross-fetch
 
       - name: Create new Ethereum Identity
         run: |
