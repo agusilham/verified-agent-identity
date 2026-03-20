@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo (your fork)
+      - name: Checkout repo (https://github.com/agusilham/verified-agent-identity)
         uses: actions/checkout@v3
 
       - name: Checkout verified‑agent‑identity skill
